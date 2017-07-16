@@ -1,5 +1,5 @@
 # dni-js
-Compute and validate a Spanish DNI/NIE numbers.
+Compute and validate a Spanish DNI/NIE numbers as described [here](http://www.interior.gob.es/web/servicios-al-ciudadano/dni/calculo-del-digito-de-control-del-nif-nie).
 
 [![Build Status](https://travis-ci.org/albertfdp/dni-js.svg?branch=master)](https://travis-ci.org/albertfdp/dni-js)
 [![npm version](https://badge.fury.io/js/dni-js.svg)](https://badge.fury.io/js/dni-js)
