@@ -1,6 +1,9 @@
 # dni-js
 Compute and validate a Spanish DNI/NIE numbers.
 
+[![Build Status](https://travis-ci.org/albertfdp/dni-js.svg?branch=master)](https://travis-ci.org/albertfdp/dni-js)
+[![npm version](https://badge.fury.io/js/dni-js.svg)](https://badge.fury.io/js/dni-js)
+
 ## Install
 
 ```
