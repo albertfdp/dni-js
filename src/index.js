@@ -1,10 +1,10 @@
 const LETTERS = require('./letterMap');
 
-const DNI_REGEXP = /(\d{8})(\s|-)?(\w)/;
-const NIE_REGEXP = /([X|Y|Z]\d{7})(\s|-)?(\w)/;
+const DNI_REGEXP = /^(\d{8})(\s|-)?(\w)$/;
+const NIE_REGEXP = /^([X|Y|Z]\d{7})(\s|-)?(\w)$/;
 
-const DNI_NUMBER_REGEXP = /\d{8}/;
-const NIE_NUMBER_REGEXP = /([X|Y|Z]\d{7})/;
+const DNI_NUMBER_REGEXP = /^\d{8}$/;
+const NIE_NUMBER_REGEXP = /^([X|Y|Z]\d{7})$/;
 
 const dni = number => {
   if (DNI_NUMBER_REGEXP.test(number) || NIE_NUMBER_REGEXP.test(number)) {

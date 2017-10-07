@@ -2,6 +2,7 @@ const expect = require('unexpected').clone();
 
 const { dni, nie, isNIE, getControlDigit, isValid } = require('.');
 
+
 describe('dni-js', () => {
   describe('dni', () => {
     it('returns a DNI number with the control letter', () => {
@@ -10,6 +11,11 @@ describe('dni-js', () => {
     });
     
     describe('when passing an invalid number', () => {
+      it('returns null if DNI contains extra chars', () => {
+        expect(dni('12345678FFF'), 'to equal', null);
+        expect(dni('X1234567FFF'), 'to equal', null);
+      })
+      
       it('returns null', () => {
         expect(dni(), 'to equal', null);
         expect(dni(2), 'to equal', null);
