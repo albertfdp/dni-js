@@ -1,4 +1,5 @@
 # dni-js
+
 Compute and validate a Spanish DNI/NIE numbers as described [here](http://www.interior.gob.es/web/servicios-al-ciudadano/dni/calculo-del-digito-de-control-del-nif-nie).
 
 [![Build Status](https://travis-ci.org/albertfdp/dni-js.svg?branch=master)](https://travis-ci.org/albertfdp/dni-js)
@@ -43,6 +44,10 @@ Alias for `getControlDigit`.
 #### `.isValid (string)`
 
 Returns `true` or `false` by validating the input.
+
+#### `.normalize (string)`
+
+Given a string input, it returns a normalized valid DNI. When input is either not a string, or invalid, it returns null.
 
 ## License
 
