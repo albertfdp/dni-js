@@ -1,6 +1,6 @@
 const unexpected = require('unexpected');
 
-const { dni, nie, isNIE, getControlDigit, isValid } = require('.');
+const { dni, nie, getControlDigit, isValid, normalize } = require('.');
 
 const expect = unexpected
   .clone()
@@ -78,6 +78,22 @@ describe('dni-js', () => {
     describe('when using a NIE', () => {
       it('when passing an integer returns Z', () => {
         expect('X1234567', 'to have control digit', 'L');
+      });
+    });
+  });
+
+  describe('normalize', () => {
+    describe('for a valid input', () => {
+      it('returns a normalized string', () => {
+        expect(normalize('   12 34 56 7 8-z'), 'to equal', '12345678-Z');
+      });
+    });
+
+    describe('for an invalid input', () => {
+      ['   12 34 56 7 8-b', null, undefined, ' ', '', 1].forEach(input => {
+        it(`returns null for input "${input}"`, () => {
+          expect(normalize(input), 'to equal', null);
+        });
       });
     });
   });
