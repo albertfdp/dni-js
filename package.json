@@ -4,9 +4,9 @@
   "description": "Compute and validate a Spanish DNI/NIE number",
   "main": "src/index.js",
   "scripts": {
-    "format:check": "prettier --check 'src/**/*.js'",
-    "format": "prettier --write 'src/**/*.js'",
-    "lint": "npm run format:check",
+    "format:check": "prettier --check './**/*.js'",
+    "format": "prettier --write './**/*.js'",
+    "lint": "npm run format:check && eslint .",
     "test:watch": "jest --watch",
     "test": "jest"
   },
@@ -27,6 +27,8 @@
   },
   "homepage": "https://github.com/albertfdp/dni-js#readme",
   "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-plugin-jest": "^24.4.0",
     "jest": "^27.1.0",
     "prettier": "^2.3.2",
     "unexpected": "^12.0.3"

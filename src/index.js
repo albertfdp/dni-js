@@ -1,3 +1,5 @@
+"use strict";
+
 const LETTERS = require("./letterMap");
 
 const DNI_REGEXP = /^(\d{8})(\s|-)?(\w)$/;
@@ -33,7 +35,7 @@ const isValid = (dni = "") => {
     return false;
   }
 
-  const [group, digits, separator, letter] = dni.toUpperCase().match(matcher);
+  const [, digits, , letter] = dni.toUpperCase().match(matcher);
   return getControlDigit(digits) === letter;
 };
 
