@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/albertfdp/dni-js#readme",
   "devDependencies": {
-    "jest": "^24.8.0",
-    "unexpected": "^11.6.0"
+    "jest": "^27.1.0",
+    "unexpected": "^12.0.3"
   }
 }
