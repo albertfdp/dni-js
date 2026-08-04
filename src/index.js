@@ -43,6 +43,9 @@ const normalize = (input = "") => {
   if (!input || typeof input !== "string") return null;
 
   input = input.replace(/\s/g, "").toUpperCase();
+  if (/^\d{7}\w$/.test(input)) {
+    input = `0${input}`;
+  }
   return isValid(input) ? input : null;
 };
 
