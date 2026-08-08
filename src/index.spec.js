@@ -3,8 +3,8 @@ const { dni, nie, getControlDigit, isValid, normalize } = require(".");
 describe("dni-js", () => {
   describe("dni", () => {
     it("returns a DNI number with the control letter", () => {
-      expect(dni(12345678)).toBe("12345678-Z");
-      expect(dni("12345678")).toBe("12345678-Z");
+      expect(dni(12345678)).toBe("12345678Z");
+      expect(dni("12345678")).toBe("12345678Z");
     });
 
     describe("when passing an invalid number", () => {
@@ -31,7 +31,7 @@ describe("dni-js", () => {
 
   describe("nie", () => {
     it("returns a NIE number with the control letter", () => {
-      expect(nie("X1234567")).toBe("X1234567-L");
+      expect(nie("X1234567")).toBe("X1234567L");
     });
 
     describe("when passing an invalid number", () => {
@@ -87,7 +87,7 @@ describe("dni-js", () => {
   describe("normalize", () => {
     describe("for a valid input", () => {
       it("returns a normalized string", () => {
-        expect(normalize("   12 34 56 7 8-z")).toBe("12345678-Z");
+        expect(normalize("   12 34 56 7 8-z")).toBe("12345678Z");
       });
 
       it("returns a normalized NIE", () => {
@@ -95,10 +95,26 @@ describe("dni-js", () => {
       });
     });
 
+    describe("for the accepted separators", () => {
+      it.each(["12345678Z", "12345678-Z", "12345678 Z"])(
+        "returns the same canonical string for %p",
+        (input) => {
+          expect(normalize(input)).toBe("12345678Z");
+        },
+      );
+
+      it.each(["12345678-Z", "x1234567-l", "5821400-P", "   12 34 56 7 8-z"])(
+        "is idempotent for %p",
+        (input) => {
+          expect(normalize(normalize(input))).toBe(normalize(input));
+        },
+      );
+    });
+
     describe("when the leading zeros have been stripped", () => {
       it.each([
         ["5821400P", "05821400P"],
-        ["5821400-P", "05821400-P"],
+        ["5821400-P", "05821400P"],
         ["5 82 14 00 p", "05821400P"],
         ["24r", "00000024R"],
       ])("pads %p up to eight digits", (input, expected) => {
@@ -109,6 +125,7 @@ describe("dni-js", () => {
     describe("for an invalid input", () => {
       it.each([
         "   12 34 56 7 8-b",
+        "12345678--Z",
         "5821400X",
         "X123456L",
         null,

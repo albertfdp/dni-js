@@ -6,14 +6,14 @@ const DNI_REGEXP = /^(\d{8})(\s|-)?(\w)$/;
 const NIE_REGEXP = /^([XYZ]\d{7})(\s|-)?(\w)$/;
 
 // A DNI whose leading zeros were stripped, e.g. by a spreadsheet reading it as a number.
-const SHORT_DNI_REGEXP = /^(\d{1,7})(-?)(\w)$/;
+const SHORT_DNI_REGEXP = /^(\d{1,7})-?(\w)$/;
 
 const DNI_NUMBER_REGEXP = /^\d{8}$/;
 const NIE_NUMBER_REGEXP = /^([XYZ]\d{7})$/;
 
 const dni = (number) => {
   if (DNI_NUMBER_REGEXP.test(number) || NIE_NUMBER_REGEXP.test(number)) {
-    return `${number}-${getControlDigit(number)}`;
+    return `${number}${getControlDigit(number)}`;
   }
 
   return null;
@@ -49,11 +49,13 @@ const normalize = (input = "") => {
 
   const short = input.match(SHORT_DNI_REGEXP);
   if (short) {
-    const [, digits, separator, letter] = short;
-    input = `${digits.padStart(8, "0")}${separator}${letter}`;
+    const [, digits, letter] = short;
+    input = `${digits.padStart(8, "0")}${letter}`;
   }
 
-  return isValid(input) ? input : null;
+  // Validate before dropping the separator: stripping it first would let
+  // "12345678--Z" collapse into something valid and widen what we accept.
+  return isValid(input) ? input.replace("-", "") : null;
 };
 
 module.exports = {
