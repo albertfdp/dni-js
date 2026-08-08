@@ -72,15 +72,36 @@ describe("dni-js", () => {
       it("returns a normalized string", () => {
         expect(normalize("   12 34 56 7 8-z")).toBe("12345678-Z");
       });
+
+      it("returns a normalized NIE", () => {
+        expect(normalize("x1234567l")).toBe("X1234567L");
+      });
+    });
+
+    describe("when the leading zeros have been stripped", () => {
+      it.each([
+        ["5821400P", "05821400P"],
+        ["5821400-P", "05821400-P"],
+        ["5 82 14 00 p", "05821400P"],
+        ["24r", "00000024R"],
+      ])("pads %p up to eight digits", (input, expected) => {
+        expect(normalize(input)).toBe(expected);
+      });
     });
 
     describe("for an invalid input", () => {
-      it.each(["   12 34 56 7 8-b", null, undefined, " ", "", 1])(
-        "returns null for input %p",
-        (input) => {
-          expect(normalize(input)).toBeNull();
-        },
-      );
+      it.each([
+        "   12 34 56 7 8-b",
+        "5821400X",
+        "X123456L",
+        null,
+        undefined,
+        " ",
+        "",
+        1,
+      ])("returns null for input %p", (input) => {
+        expect(normalize(input)).toBeNull();
+      });
     });
   });
 });
