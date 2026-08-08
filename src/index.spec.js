@@ -1,4 +1,12 @@
-const { dni, nie, getControlDigit, isValid, normalize } = require(".");
+const {
+  dni,
+  nie,
+  getControlDigit,
+  isDNI,
+  isNIE,
+  isValid,
+  normalize,
+} = require(".");
 
 describe("dni-js", () => {
   describe("dni", () => {
@@ -20,6 +28,13 @@ describe("dni-js", () => {
         expect(dni("1234567")).toBeNull();
       });
 
+      it.each(["X1234567", "Y1234567", "Z1234567"])(
+        "returns null for the NIE body %p",
+        (number) => {
+          expect(dni(number)).toBeNull();
+        },
+      );
+
       it.each(["|1234567", "W1234567", "x1234567"])(
         "returns null for invalid NIE prefix %p",
         (number) => {
@@ -35,6 +50,11 @@ describe("dni-js", () => {
     });
 
     describe("when passing an invalid number", () => {
+      it("returns null for a DNI body", () => {
+        expect(nie("12345678")).toBeNull();
+        expect(nie(12345678)).toBeNull();
+      });
+
       it.each(["|1234567", "W1234567", "x1234567", "X123456", ""])(
         "returns null for input %p",
         (number) => {
@@ -45,12 +65,17 @@ describe("dni-js", () => {
   });
 
   describe("isValid", () => {
-    it.each(["12345678-Z", "12345678Z", "12345678 Z", "X1234567-L"])(
-      "returns true for valid number %p",
-      (number) => {
-        expect(isValid(number)).toBe(true);
-      },
-    );
+    it.each([
+      "12345678-Z",
+      "12345678Z",
+      "12345678 Z",
+      "12345678z",
+      "X1234567-L",
+      "x1234567l",
+      "x1234567-l",
+    ])("returns true for valid number %p", (number) => {
+      expect(isValid(number)).toBe(true);
+    });
 
     it.each([
       "12345678-L",
@@ -63,8 +88,74 @@ describe("dni-js", () => {
       undefined,
       "123456-L",
       12345678,
+      123456789,
     ])("returns false for invalid number %p", (number) => {
       expect(isValid(number)).toBe(false);
+    });
+  });
+
+  describe("isDNI", () => {
+    it.each(["12345678-Z", "12345678Z", "12345678 Z", "12345678z"])(
+      "returns true for the DNI %p",
+      (value) => {
+        expect(isDNI(value)).toBe(true);
+      },
+    );
+
+    it.each(["X1234567-L", "X1234567L", "x1234567l"])(
+      "returns false for the NIE %p",
+      (value) => {
+        expect(isDNI(value)).toBe(false);
+      },
+    );
+
+    it.each([
+      "12345678-L",
+      "12345678",
+      "123456-L",
+      "|1234567-L",
+      "",
+      null,
+      undefined,
+      12345678,
+      123456789,
+    ])("returns false for input %p", (value) => {
+      expect(isDNI(value)).toBe(false);
+    });
+  });
+
+  describe("isNIE", () => {
+    it.each([
+      "X1234567-L",
+      "X1234567L",
+      "X1234567 L",
+      "x1234567l",
+      "Y1234567-X",
+      "Z1234567-R",
+    ])("returns true for the NIE %p", (value) => {
+      expect(isNIE(value)).toBe(true);
+    });
+
+    it.each(["12345678-Z", "12345678Z", "12345678z"])(
+      "returns false for the DNI %p",
+      (value) => {
+        expect(isNIE(value)).toBe(false);
+      },
+    );
+
+    it.each([
+      "X1234567-X",
+      "X1234567",
+      "W1234567-L",
+      "|1234567-L",
+      "X123456-L",
+      "",
+      null,
+      undefined,
+      12345678,
+      123456789,
+    ])("returns false for input %p", (value) => {
+      expect(isNIE(value)).toBe(false);
     });
   });
 
