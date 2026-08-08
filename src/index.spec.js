@@ -33,7 +33,7 @@ describe("dni-js", () => {
       "returns true for valid number %p",
       (number) => {
         expect(isValid(number)).toBe(true);
-      }
+      },
     );
 
     it.each([
@@ -79,7 +79,7 @@ describe("dni-js", () => {
         "returns null for input %p",
         (input) => {
           expect(normalize(input)).toBeNull();
-        }
+        },
       );
     });
   });

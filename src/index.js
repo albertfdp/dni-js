@@ -28,8 +28,8 @@ const isValid = (dni = "") => {
   const matcher = DNI_REGEXP.test(dni)
     ? DNI_REGEXP
     : NIE_REGEXP.test(dni)
-    ? NIE_REGEXP
-    : null;
+      ? NIE_REGEXP
+      : null;
 
   if (!matcher) {
     return false;
