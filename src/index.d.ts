@@ -3,14 +3,20 @@ declare namespace dniJs {
   type Input = string | number;
 
   /**
-   * Returns the input with its control letter appended, in the official format
+   * Returns the DNI body with its control letter appended, in the official format
    * `12345678Z` (no separator).
-   * Returns `null` if the input is not a well-formed DNI/NIE body.
+   * Returns `null` for anything that is not eight digits, NIE bodies included.
    */
   function dni(number: Input): string | null;
 
-  /** Alias for {@link dni}, named for NIE inputs (`X1234567L`). */
-  const nie: typeof dni;
+  /**
+   * Returns the NIE body with its control letter appended, in the official format
+   * `X1234567L` (no separator).
+   * Returns `null` for anything that is not `X`, `Y` or `Z` followed by seven digits,
+   * DNI bodies included. Takes no `number`, unlike {@link dni}: the prefix means a
+   * NIE body can never be one.
+   */
+  function nie(body: string): string | null;
 
   /** Returns the control letter for the given DNI/NIE body. */
   function getControlDigit(input: Input): string;
@@ -23,6 +29,12 @@ declare namespace dniJs {
    * separator: `12345678Z`, `12345678-Z` and `12345678 Z` all validate.
    */
   function isValid(dni: string): boolean;
+
+  /** Validates a full DNI (`12345678Z`), control letter included. NIEs return `false`. */
+  function isDNI(value: string): boolean;
+
+  /** Validates a full NIE (`X1234567L`), control letter included. DNIs return `false`. */
+  function isNIE(value: string): boolean;
 
   /**
    * Returns the canonical DNI/NIE for the input: whitespace and separator

@@ -27,13 +27,14 @@ TypeScript declarations ship with the package, so there is no `@types` package t
 
 #### `.dni (number|string)`
 
-Returns a DNI number with the control digit appended in the official format `12345678Z`. If the input is
-invalid, returns `null`.
+Returns a DNI number with the control digit appended in the official format `12345678Z`. Only
+eight-digit inputs are accepted; anything else, NIE numbers included, returns `null`.
 
-#### `.nie (number|string)`
+#### `.nie (string)`
 
-Returns a NIE number with the control digit appended in the official format `X1234567L`. If the input is
-invalid, returns `null`.
+Returns a NIE number with the control digit appended in the official format `X1234567L`. Only `X`,
+`Y` or `Z` followed by seven digits is accepted; anything else, DNI numbers included, returns `null`.
+Unlike `dni`, it takes no number — the prefix means a NIE body can never be one.
 
 #### `.getControlDigit (number|string)`
 
@@ -45,8 +46,21 @@ Alias for `getControlDigit`.
 
 #### `.isValid (string)`
 
-Returns `true` or `false` by validating the input. The separator is optional, so `12345678Z`, `12345678-Z`
-and `12345678 Z` all validate.
+Returns `true` or `false` by validating the input, which may be either kind of document. The
+separator is optional, so `12345678Z`, `12345678-Z` and `12345678 Z` all validate.
+
+#### `.isDNI (string)`
+
+#### `.isNIE (string)`
+
+Like `isValid`, but each answers for one kind of document only, so callers can tell a national
+apart from a foreign resident without writing their own regex. Both are equally permissive about
+the separator:
+
+```js
+dni.isNIE("X1234567L"); // => true
+dni.isDNI("X1234567L"); // => false
+```
 
 #### `.normalize (string)`
 

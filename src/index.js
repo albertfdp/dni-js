@@ -11,13 +11,13 @@ const SHORT_DNI_REGEXP = /^(\d{1,7})-?(\w)$/;
 const DNI_NUMBER_REGEXP = /^\d{8}$/;
 const NIE_NUMBER_REGEXP = /^([XYZ]\d{7})$/;
 
-const dni = (number) => {
-  if (DNI_NUMBER_REGEXP.test(number) || NIE_NUMBER_REGEXP.test(number)) {
-    return `${number}${getControlDigit(number)}`;
-  }
+const withControlLetter = (body) => `${body}${getControlDigit(body)}`;
 
-  return null;
-};
+const dni = (number) =>
+  DNI_NUMBER_REGEXP.test(number) ? withControlLetter(number) : null;
+
+const nie = (number) =>
+  NIE_NUMBER_REGEXP.test(number) ? withControlLetter(number) : null;
 
 const getControlDigit = (input) => {
   const digits = NIE_NUMBER_REGEXP.test(input)
@@ -27,20 +27,24 @@ const getControlDigit = (input) => {
   return LETTERS[parseInt(digits, 10) % 23];
 };
 
-const isValid = (dni = "") => {
-  const matcher = DNI_REGEXP.test(dni)
-    ? DNI_REGEXP
-    : NIE_REGEXP.test(dni)
-      ? NIE_REGEXP
-      : null;
-
-  if (!matcher) {
+const matchesDocument = (value, matcher) => {
+  if (typeof value !== "string") {
     return false;
   }
 
-  const [, digits, , letter] = dni.toUpperCase().match(matcher);
+  const match = value.toUpperCase().match(matcher);
+  if (!match) {
+    return false;
+  }
+
+  const [, digits, , letter] = match;
   return getControlDigit(digits) === letter;
 };
+
+const isDNI = (value) => matchesDocument(value, DNI_REGEXP);
+const isNIE = (value) => matchesDocument(value, NIE_REGEXP);
+
+const isValid = (value) => isDNI(value) || isNIE(value);
 
 const normalize = (input = "") => {
   if (!input || typeof input !== "string") return null;
@@ -60,9 +64,11 @@ const normalize = (input = "") => {
 
 module.exports = {
   dni,
-  nie: dni,
+  nie,
   normalize,
   getControlDigit,
   getLetter: getControlDigit,
+  isDNI,
+  isNIE,
   isValid,
 };
