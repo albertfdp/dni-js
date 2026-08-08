@@ -58,18 +58,10 @@ dni.normalize("12345678-Z"); // 12345678Z
 dni.normalize("5821400P"); // 05821400P
 ```
 
-## Development
+## Contributing
 
-This repository uses [pnpm](https://pnpm.io). The version is pinned in the
-`packageManager` field, so [Corepack](https://nodejs.org/api/corepack.html)
-will pick it up automatically. Node 20.19 or newer is required.
-
-```
-$ pnpm install
-$ pnpm test          # run the test suite
-$ pnpm run lint      # eslint
-$ pnpm run format    # prettier --write
-```
+See [CONTRIBUTING.md](https://github.com/albertfdp/dni-js/blob/master/CONTRIBUTING.md)
+for local setup, pull request conventions and the release process.
 
 ## License
 
