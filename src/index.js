@@ -3,13 +3,13 @@
 const LETTERS = require("./letterMap");
 
 const DNI_REGEXP = /^(\d{8})(\s|-)?(\w)$/;
-const NIE_REGEXP = /^([X|Y|Z]\d{7})(\s|-)?(\w)$/;
+const NIE_REGEXP = /^([XYZ]\d{7})(\s|-)?(\w)$/;
 
 // A DNI whose leading zeros were stripped, e.g. by a spreadsheet reading it as a number.
 const SHORT_DNI_REGEXP = /^(\d{1,7})(-?)(\w)$/;
 
 const DNI_NUMBER_REGEXP = /^\d{8}$/;
-const NIE_NUMBER_REGEXP = /^([X|Y|Z]\d{7})$/;
+const NIE_NUMBER_REGEXP = /^([XYZ]\d{7})$/;
 
 const dni = (number) => {
   if (DNI_NUMBER_REGEXP.test(number) || NIE_NUMBER_REGEXP.test(number)) {
