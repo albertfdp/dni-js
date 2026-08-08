@@ -47,10 +47,11 @@ Returns `true` or `false` by validating the input.
 
 #### `.normalize (string)`
 
-Given a string input, it returns a normalized valid DNI. When input is either not a string, or invalid, it returns null. For example:
+Given a string input, it returns a normalized valid DNI. When input is either not a string, or invalid, it returns null. Leading zeros stripped by spreadsheets and other software that reads the DNI as a number are restored. For example:
 
 ```js
 dni.normalize("   12 34 56 7 8-z"); // 12345678-Z
+dni.normalize("5821400P"); // 05821400P
 ```
 
 ## Development
