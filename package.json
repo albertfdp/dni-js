@@ -3,6 +3,10 @@
   "version": "0.2.1",
   "description": "Compute and validate a Spanish DNI/NIE number",
   "main": "src/index.js",
+  "files": [
+    "src/index.js",
+    "src/letterMap.js"
+  ],
   "packageManager": "pnpm@10.34.5",
   "engines": {
     "node": ">=20.19.0"
