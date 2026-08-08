@@ -1,0 +1,60 @@
+# Cuts releases from conventional commits and publishes them to npm.
+#
+# release-please keeps a "chore(master): release x.y.z" PR up to date with the
+# generated CHANGELOG.md and version bump. Merging that PR tags the commit,
+# creates the GitHub Release, and triggers the publish job below.
+#
+# The filename is load-bearing: npm's trusted publisher for `dni-js` is pinned
+# to `release.yml`. Renaming this file breaks publishing until npm is updated.
+
+name: Release
+
+on:
+  push:
+    branches: [master]
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - uses: googleapis/release-please-action@v5
+        id: release
+
+  publish:
+    needs: release-please
+    if: needs.release-please.outputs.release_created == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Required for npm trusted publishing: the OIDC token is exchanged for
+      # short-lived registry credentials, so there is no NPM_TOKEN secret.
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.release-please.outputs.tag_name }}
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: "pnpm"
+          registry-url: "https://registry.npmjs.org"
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+      # Trusted publishing needs npm >= 11.5.1; don't rely on whatever npm
+      # happens to ship with the Node release.
+      - run: npm install -g npm@latest
+      # `npm publish`, not `pnpm publish`: pnpm does not implement npm's OIDC
+      # exchange. Safe here because there is no build step. Provenance is
+      # attached automatically under trusted publishing.
+      - run: npm publish

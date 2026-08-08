@@ -21,9 +21,13 @@
     "test:watch": "jest --watch",
     "test": "jest"
   },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/albertfdp/dni-js.git"
+    "url": "git+https://github.com/albertfdp/dni-js.git"
   },
   "keywords": [
     "dni",

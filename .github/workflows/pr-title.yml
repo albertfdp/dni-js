@@ -1,0 +1,25 @@
+# Enforces Conventional Commits on pull request titles.
+#
+# The repository squash-merges with the PR title as the commit subject, so the
+# title is the only string that ever becomes a commit on master — and it is
+# what release-please parses to pick the next version and build the changelog.
+# Linting local commits instead would be pointless: squashing discards them.
+
+name: PR title
+
+on:
+  pull_request_target:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  pull-requests: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      # Reads the PR title only — no checkout, so running on pull_request_target
+      # never executes code from the incoming branch.
+      - uses: amannn/action-semantic-pull-request@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
