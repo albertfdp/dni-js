@@ -19,12 +19,28 @@ describe("dni-js", () => {
         expect(dni("")).toBeNull();
         expect(dni("1234567")).toBeNull();
       });
+
+      it.each(["|1234567", "W1234567", "x1234567"])(
+        "returns null for invalid NIE prefix %p",
+        (number) => {
+          expect(dni(number)).toBeNull();
+        },
+      );
     });
   });
 
   describe("nie", () => {
     it("returns a NIE number with the control letter", () => {
       expect(nie("X1234567")).toBe("X1234567-L");
+    });
+
+    describe("when passing an invalid number", () => {
+      it.each(["|1234567", "W1234567", "x1234567", "X123456", ""])(
+        "returns null for input %p",
+        (number) => {
+          expect(nie(number)).toBeNull();
+        },
+      );
     });
   });
 
@@ -41,6 +57,7 @@ describe("dni-js", () => {
       "12345678L",
       "12345678 L",
       "X1234567-X",
+      "|1234567-L",
       "",
       null,
       undefined,
