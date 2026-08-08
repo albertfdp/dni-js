@@ -3,10 +3,14 @@
   "version": "0.2.1",
   "description": "Compute and validate a Spanish DNI/NIE number",
   "main": "src/index.js",
+  "packageManager": "pnpm@10.34.5",
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "scripts": {
     "format:check": "prettier --check './**/*.js'",
     "format": "prettier --write './**/*.js'",
-    "lint": "npm run format:check && eslint .",
+    "lint": "eslint .",
     "test:watch": "jest --watch",
     "test": "jest"
   },

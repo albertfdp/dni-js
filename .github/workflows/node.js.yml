@@ -15,10 +15,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      # Must run before setup-node so that `cache: pnpm` can resolve the store path.
+      # The pnpm version is read from the `packageManager` field in package.json.
+      - uses: pnpm/action-setup@v6
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run lint
-      - run: npm test
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run format:check
+      - run: pnpm run lint
+      - run: pnpm test
