@@ -21,6 +21,8 @@ const dni = require("dni-js");
 dni.isValid("12345678-Z"); // => true
 ```
 
+TypeScript declarations ship with the package, so there is no `@types` package to install.
+
 ### API
 
 #### `.dni (number|string)`
