@@ -6,6 +6,7 @@
       "changelog-path": "CHANGELOG.md",
       "include-component-in-tag": false,
       "last-release-sha": "4877cc6910f44d6942c9a81fb073091d9f1b5b28",
+      "pull-request-header": ":robot: I have created a release *beep* *boop*\n\n> [!IMPORTANT]\n> Upgrading across a major? The README carries a migration guide covering every behaviour change, worked example by worked example: **[Migrating from 0.2.x](https://github.com/albertfdp/dni-js#migrating-from-02x)**. Point this link at the newest guide whenever another one is written.\n>\n> The changelog below lists what changed; the guide says what to do about it — including the one change that silently invalidates `normalize()` values already stored.",
       "changelog-sections": [
         { "type": "feat", "section": "Features" },
         { "type": "fix", "section": "Bug Fixes" },
