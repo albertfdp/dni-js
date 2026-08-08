@@ -2,7 +2,7 @@
 
 Compute and validate a Spanish DNI/NIE numbers as described [here](http://www.interior.gob.es/web/servicios-al-ciudadano/dni/calculo-del-digito-de-control-del-nif-nie).
 
-[![Build Status](https://travis-ci.org/albertfdp/dni-js.svg?branch=master)](https://travis-ci.org/albertfdp/dni-js)
+[![CI](https://github.com/albertfdp/dni-js/actions/workflows/node.js.yml/badge.svg)](https://github.com/albertfdp/dni-js/actions/workflows/node.js.yml)
 [![npm version](https://badge.fury.io/js/dni-js.svg)](https://badge.fury.io/js/dni-js)
 
 ## Install
@@ -51,6 +51,19 @@ Given a string input, it returns a normalized valid DNI. When input is either no
 
 ```js
 dni.normalize("   12 34 56 7 8-z"); // 12345678-Z
+```
+
+## Development
+
+This repository uses [pnpm](https://pnpm.io). The version is pinned in the
+`packageManager` field, so [Corepack](https://nodejs.org/api/corepack.html)
+will pick it up automatically. Node 20.19 or newer is required.
+
+```
+$ pnpm install
+$ pnpm test          # run the test suite
+$ pnpm run lint      # eslint
+$ pnpm run format    # prettier --write
 ```
 
 ## License
