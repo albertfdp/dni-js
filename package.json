@@ -1,6 +1,6 @@
 {
   "name": "dni-js",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "description": "Compute and validate a Spanish DNI/NIE number",
   "main": "src/index.js",
   "types": "src/index.d.ts",
