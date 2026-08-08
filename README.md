@@ -42,6 +42,9 @@ Two input shapes show up throughout:
 Builders (`dni`, `nie`) take a body and hand back a complete number. Checkers (`isValid`, `isDNI`, `isNIE`,
 `normalize`) take a complete number and inspect it.
 
+One more export is not listed above: `dniOrNie`, a compatibility shim for callers upgrading from 0.2.x. See
+[Migrating from 0.2.x](#migrating-from-02x).
+
 ### `dni(body)`
 
 Appends the control letter to a DNI body, in the official format (no separator).
@@ -144,6 +147,61 @@ Declarations ship with the package, so there is no `@types` package to install.
 import dni = require("dni-js");
 
 const normalized: string | null = dni.normalize("12345678-Z");
+```
+
+## Migrating from 0.2.x
+
+### Builders are strict, and emit the official format
+
+`nie` used to be a literal alias of `dni`, so either function accepted either body, and both emitted a
+hyphen. Each now takes only its own shape, and the separator is gone:
+
+```js
+dni.dni("12345678"); // 0.2.x => "12345678-Z",  now => "12345678Z"
+dni.nie("12345678"); // 0.2.x => "12345678-Z",  now => null
+dni.dni("X1234567"); // 0.2.x => "X1234567-L",  now => null
+```
+
+Call the builder matching the document. When the two are mixed in one field, branch on the new `isDNI` /
+`isNIE` predicates, which is also how you find out which one you are holding.
+
+If you only need the number and not its kind, `dniOrNie` is a shim that restores the old lenient behaviour:
+
+```js
+dni.dniOrNie("12345678"); // => "12345678Z"
+dni.dniOrNie("X1234567"); // => "X1234567L"
+dni.dniOrNie("A5881850"); // => null — legal-entity NIFs are not supported
+```
+
+It exists for this upgrade. Prefer `dni` or `nie` when the document is known.
+
+### Everything that changed
+
+| 0.2.x                                          | 1.0.0                          | What to do                                                       |
+| ---------------------------------------------- | ------------------------------ | ---------------------------------------------------------------- |
+| `dni("12345678")` → `"12345678-Z"`             | `"12345678Z"`                  | official format — add the hyphen yourself if you display it      |
+| `nie` aliased `dni`; either took either body   | each rejects the other's shape | call the matching builder, or `dniOrNie` if the shape is unknown |
+| `isValid("x1234567l")` → `false`               | `true`                         | lowercase NIEs now validate, matching lowercase DNIs             |
+| `isValid(123456789)` threw a `TypeError`       | `false`                        | drop the surrounding `try`/`catch`                               |
+| `normalize("5821400P")` → `null`               | `"05821400P"`                  | stripped leading zeros are restored                              |
+| `normalize("12 34 56 7 8-z")` → `"12345678-Z"` | `"12345678Z"`                  | re-normalize stored values — see below                           |
+
+New in 1.0.0: `isDNI` and `isNIE`, so telling a national apart from a foreign resident no longer needs your
+own regex, and bundled TypeScript declarations — 0.2.x shipped none, so `dni-js` was untyped. The new
+declarations reject a few calls the runtime still tolerates, `nie(12345678)` among them: a NIE body always
+carries an `X`/`Y`/`Z` prefix, so it can never be a number.
+
+### Re-normalize anything you stored
+
+This is the only change that can quietly corrupt data rather than break a call site. `normalize` is
+documented above as safe to use as a storage or dedup key, and its 0.2.x output carried a hyphen. Keys
+written by 0.2.x therefore never match keys written by 1.0.0, and lookups miss silently.
+
+`normalize` accepts the hyphenated form and is idempotent, so running stored values back through it once is
+the whole fix:
+
+```js
+dni.normalize("12345678-Z"); // => "12345678Z"
 ```
 
 ## Contributing
