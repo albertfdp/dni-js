@@ -18,7 +18,7 @@ Validation is based on this [document](http://www.interior.gob.es/web/servicios-
 ```js
 const dni = require("dni-js");
 
-dni.isValid("12345678-Z"); // => true
+dni.isValid("12345678Z"); // => true
 ```
 
 TypeScript declarations ship with the package, so there is no `@types` package to install.
@@ -27,13 +27,13 @@ TypeScript declarations ship with the package, so there is no `@types` package t
 
 #### `.dni (number|string)`
 
-Returns a DNI number with the control digit appended in the format `12345678-Z`. If the input is invalid,
-returns `null`.
+Returns a DNI number with the control digit appended in the official format `12345678Z`. If the input is
+invalid, returns `null`.
 
 #### `.nie (number|string)`
 
-Returns a NIE number with the control digit appended in the format `X1234567-L`. If the input is invalid,
-returns `null`.
+Returns a NIE number with the control digit appended in the official format `X1234567L`. If the input is
+invalid, returns `null`.
 
 #### `.getControlDigit (number|string)`
 
@@ -45,14 +45,16 @@ Alias for `getControlDigit`.
 
 #### `.isValid (string)`
 
-Returns `true` or `false` by validating the input.
+Returns `true` or `false` by validating the input. The separator is optional, so `12345678Z`, `12345678-Z`
+and `12345678 Z` all validate.
 
 #### `.normalize (string)`
 
-Given a string input, it returns a normalized valid DNI. When input is either not a string, or invalid, it returns null. Leading zeros stripped by spreadsheets and other software that reads the DNI as a number are restored. For example:
+Given a string input, it returns the canonical form of a valid DNI. When input is either not a string, or invalid, it returns null. Whitespace and the separator are removed, so every spelling of the same number produces an identical string that can be used as a storage or dedup key. Leading zeros stripped by spreadsheets and other software that reads the DNI as a number are restored. For example:
 
 ```js
-dni.normalize("   12 34 56 7 8-z"); // 12345678-Z
+dni.normalize("   12 34 56 7 8-z"); // 12345678Z
+dni.normalize("12345678-Z"); // 12345678Z
 dni.normalize("5821400P"); // 05821400P
 ```
 
