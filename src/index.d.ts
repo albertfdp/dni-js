@@ -18,6 +18,17 @@ declare namespace dniJs {
    */
   function nie(body: string): string | null;
 
+  /**
+   * Returns the DNI or NIE body with its control letter appended, in the official
+   * format (no separator). Returns `null` for anything that is neither shape —
+   * legal-entity NIFs (`A58818501`) included.
+   *
+   * Exists for callers upgrading from 0.2.x, where `nie` was an alias of `dni` and
+   * either function took either body. Prefer {@link dni} or {@link nie} when the
+   * document is known.
+   */
+  function dniOrNie(body: Input): string | null;
+
   /** Returns the control letter for the given DNI/NIE body. */
   function getControlDigit(input: Input): string;
 

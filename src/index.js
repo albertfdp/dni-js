@@ -19,6 +19,11 @@ const dni = (number) =>
 const nie = (number) =>
   NIE_NUMBER_REGEXP.test(number) ? withControlLetter(number) : null;
 
+// Compatibility shim for callers upgrading from 0.2.x, where `nie` was an alias
+// of `dni` and either function took either body. The two shapes are disjoint, so
+// delegating can never be ambiguous.
+const dniOrNie = (body) => dni(body) ?? nie(body);
+
 const getControlDigit = (input) => {
   const digits = NIE_NUMBER_REGEXP.test(input)
     ? String(input).replace("X", 0).replace("Y", 1).replace("Z", 2)
@@ -65,6 +70,7 @@ const normalize = (input = "") => {
 module.exports = {
   dni,
   nie,
+  dniOrNie,
   normalize,
   getControlDigit,
   getLetter: getControlDigit,

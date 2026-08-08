@@ -8,6 +8,9 @@ import dni = require("./index");
 const withLetter: string | null = dni.dni("12345678");
 const fromNumber: string | null = dni.dni(12345678);
 const nieWithLetter: string | null = dni.nie("X1234567");
+const eitherFromDni: string | null = dni.dniOrNie("12345678");
+const eitherFromNie: string | null = dni.dniOrNie("X1234567");
+const eitherFromNumber: string | null = dni.dniOrNie(12345678);
 const letter: string = dni.getControlDigit("12345678");
 const aliasedLetter: string = dni.getLetter(12345678);
 
@@ -40,6 +43,9 @@ void [
   withLetter,
   fromNumber,
   nieWithLetter,
+  eitherFromDni,
+  eitherFromNie,
+  eitherFromNumber,
   letter,
   aliasedLetter,
   valid,

@@ -1,6 +1,7 @@
 const {
   dni,
   nie,
+  dniOrNie,
   getControlDigit,
   isDNI,
   isNIE,
@@ -61,6 +62,58 @@ describe("dni-js", () => {
           expect(nie(number)).toBeNull();
         },
       );
+    });
+  });
+
+  describe("dniOrNie", () => {
+    it("returns a DNI number with the control letter", () => {
+      expect(dniOrNie(12345678)).toBe("12345678Z");
+      expect(dniOrNie("12345678")).toBe("12345678Z");
+    });
+
+    it.each([
+      ["X1234567", "X1234567L"],
+      ["Y1234567", "Y1234567X"],
+      ["Z1234567", "Z1234567R"],
+    ])("returns the NIE body %p with the control letter", (body, expected) => {
+      expect(dniOrNie(body)).toBe(expected);
+    });
+
+    describe("when passing an invalid number", () => {
+      it("returns null for a legal-entity NIF body", () => {
+        expect(dniOrNie("A5881850")).toBeNull();
+      });
+
+      it("returns null", () => {
+        expect(dniOrNie()).toBeNull();
+        expect(dniOrNie(2)).toBeNull();
+      });
+
+      it.each([
+        "x1234567",
+        "|1234567",
+        "W1234567",
+        "1234567",
+        "X123456",
+        "12345678FFF",
+        "",
+      ])("returns null for input %p", (body) => {
+        expect(dniOrNie(body)).toBeNull();
+      });
+    });
+
+    it.each([
+      "12345678",
+      12345678,
+      "X1234567",
+      "Y1234567",
+      "Z1234567",
+      "x1234567",
+      "1234567",
+      "A5881850",
+      "",
+    ])("agrees with dni() and nie() for %p", (body) => {
+      expect(dniOrNie(body)).toBe(dni(body) ?? nie(body));
     });
   });
 
